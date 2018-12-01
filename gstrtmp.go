@@ -18,7 +18,7 @@ type Pipeline struct {
 
 func CreatePipeline() *Pipeline {
 
-	pipelineStr := "appsrc is-live=true do-timestamp=true name=src ! video/x-h264 ! h264parse ! flvmux ! rtmpsink location='rtmp://localhost/live/stream live=1"
+	pipelineStr := "appsrc is-live=true do-timestamp=true name=src ! h264parse ! video/x-h264,stream-format=(string)avc  ! flvmux ! rtmpsink location='rtmp://localhost/live/stream live=1'"
 	pipelineStrUnsafe := C.CString(pipelineStr)
 	defer C.free(unsafe.Pointer(pipelineStrUnsafe))
 	return &Pipeline{Pipeline: C.gst_rtmp_create_pipeline(pipelineStrUnsafe)}
