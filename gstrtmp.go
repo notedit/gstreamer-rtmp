@@ -6,7 +6,10 @@ package gstrtmp
 #include "gst.h"
 */
 import "C"
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+)
 
 func init() {
 	go C.gst_rtmp_start_mainloop()
@@ -16,9 +19,12 @@ type Pipeline struct {
 	Pipeline *C.GstElement
 }
 
-func CreatePipeline() *Pipeline {
+func CreatePipeline(rtmpUrl string) *Pipeline {
 
-	pipelineStr := "appsrc is-live=true do-timestamp=true name=src ! h264parse ! video/x-h264,stream-format=(string)avc  ! flvmux ! rtmpsink location='rtmp://localhost/live/stream live=1'"
+	pipelineStr := "appsrc is-live=true do-timestamp=true name=src ! h264parse ! video/x-h264,stream-format=(string)avc ! flvmux ! rtmpsink location='%s live=1'"
+
+	pipelineStr = fmt.Sprintf(pipelineStr, rtmpUrl)
+
 	pipelineStrUnsafe := C.CString(pipelineStr)
 	defer C.free(unsafe.Pointer(pipelineStrUnsafe))
 	return &Pipeline{Pipeline: C.gst_rtmp_create_pipeline(pipelineStrUnsafe)}
