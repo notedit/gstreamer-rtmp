@@ -21,7 +21,7 @@ type Pipeline struct {
 
 func CreatePipeline(rtmpUrl string) *Pipeline {
 
-	pipelineStr := "appsrc is-live=true do-timestamp=true name=src ! h264parse ! video/x-h264,stream-format=(string)avc ! flvmux ! rtmpsink location='%s live=1'"
+	pipelineStr := "appsrc is-live=true do-timestamp=true name=src ! h264parse ! video/x-h264,stream-format=(string)avc ! flvmux ! rtmpsink sync=false location='%s live=1'"
 
 	pipelineStr = fmt.Sprintf(pipelineStr, rtmpUrl)
 
